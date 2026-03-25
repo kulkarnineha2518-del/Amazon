@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amazon Clone - Real Product Photos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        a {
+            text-decoration: none;
+            color: #0f1111;
+        }
+
+        a:hover {
+            color: #c45500;
+        }
+
+        body {
+            background: #fff;
+            color: #0f1111;
+        }
+
+        /* Header - Unchanged */
+        header {
+            background: #131921;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            height: 60px;
+            justify-content: space-between;
+        }
+
+        .logo {
+            width: 100px;
+        }
+
+        .logo img {
+            width: 100%;
+            height: auto;
+        }
+
+        .location {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            color: #ccc;
+            font-size: 0.875rem;
+        }
+
+        .location i {
+            color: #fff;
+            font-size: 1.25rem;
+        }
+
+        .search-container {
+            flex: 1;
+            max-width: 600px;
+            margin: 0 1rem;
+            position: relative;
+        }
+
+        .search-select {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 42px;
+            width: 50px;
+            background: #f3f3f3;
+            border: none;
+            border-radius: 4px 0 0 4px;
+            padding: 0 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .search-input {
+            width: 100%;
+            height: 42px;
+            border: none;
+            padding: 0 1rem 0 2.5rem;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 42px;
+            width: 45px;
+            background: #febd69;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            color: #111;
+            cursor: pointer;
+        }
+
+        .search-btn:hover {
+            background: #f7a33b;
+        }
+
+        .account, .orders {
+            display: flex;
+            flex-direction: column;
+            font-size: 0.75rem;
+            color: #ccc;
+            margin: 0 0.5rem;
+        }
+
+        .account span, .orders span {
+            color: #fff;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .cart-icon {
+            font-size: 2rem;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-right: 1rem;
+            cursor: pointer;
+        }
+
+        .cart-icon span:last-child {
+            font-size: 0.875rem;
+            color: #ccc;
+            margin-top: -0.25rem;
+        }
+
+        /* Sub-navbar */
+        .sub-navbar {
+            background: #232f3e;
+            padding: 0.5rem 0;
+        }
+
+        .sub-nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            padding: 0 1rem;
+            color: #fff;
+            font-size: 0.875rem;
+        }
+
+        .hamburger {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            margin-right: 1rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            flex: 1;
+        }
+
+        .nav-links li a {
+            color: #fff;
+        }
+
+        .nav-links li a:hover {
+            color: #ffd814;
+        }
+
+        .prime {
+            background: #ffd814;
+            color: #111;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        /* Hero */
+        .hero {
+            height: 350px;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1541807084-5c52b6b3adef?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80') center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+        }
+
+        /* Products Grid */
+        .products-section {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            background: #f8f9fa;
+        }
+
+        .product-info {
+            padding: 1.25rem;
+        }
+
+        .product-title {
+            font-size: 0.95rem;
+            line-height: 1.4;
+            margin-bottom: 0.75rem;
+            color: #111;
+            font-weight: 500;
+        }
+
+        .product-price {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #B12704;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            color: #FFA41C;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            background: linear-gradient(135deg, #ffd814 0%, #fabd06 100%);
+            border: none;
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .add-to-cart:hover {
+            background: linear-gradient(135deg, #f7b500 0%, #f0ac00 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        /* Cart Modal */
+        .cart-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 200;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .cart-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 1;
+        }
+
+        .cart-content {
+            background: #fff;
+            padding: 2.5rem;
+            border-radius: 16px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        /* Footer - Unchanged */
+        footer {
+            background: #232f3e;
+            color: #fff;
+            margin-top: 4rem;
+        }
+
+        .footer-top {
+            padding: 2rem 1rem;
+            text-align: center;
+            background: #37475a;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            padding: 2rem 1rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: #ddd;
+            font-size: 0.875rem;
+        }
+
+        .footer-section a:hover {
+            color: #fff;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+            .search-container {
+                order: 3;
+                flex: 1 1 100%;
+                margin: 0.5rem 0;
+            }
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .nav-links {
+                display: none;
+            }
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header (same as before) -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon" width="100">
+            </div>
+            <div class="location">
+                <i class="material-icons">location_on</i>
+                <span>Sholapur, Maharashtra</span>
+            </div>
+            <div class="search-container">
+                <select class="search-select">
+                    <option>All</option>
+                    <option>Electronics</option>
+                    <option>Laptops</option>
+                </select>
+                <input type="text" class="search-input" placeholder="Search Amazon.in - Laptops, Electronics...">
+                <button class="search-btn"><i class="material-icons">search</i></button>
+            </div>
+            <div class="account">
+                <span>Hello, Neha</span>
+                <span>Account & Lists</span>
+            </div>
+            <div class="orders">
+                <span>Returns</span>
+                <span>& Orders</span>
+            </div>
+            <label for="cart-toggle" class="cart-icon">
+                <i class="material-icons">shopping_cart</i>
+                <span>Cart (0)</span>
+            </label>
+        </nav>
+        <div class="sub-navbar">
+            <div class="sub-nav-content">
+                <div class="hamburger">
+                    <i class="material-icons">menu</i>
+                    <span>All</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#">Today's Deals</a></li>
+                    <li><a href="#">Customer Service</a></li>
+                    <li><a href="#">Registry</a></li>
+                    <li><a href="#">Gift Cards</a></li>
+                    <li><a href="#">Sell</a></li>
+                </ul>
+                <a href="#" class="prime">Amazon Prime</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero with real shopping image -->
+    <section class="hero">
+        <div>
+            <h1>Shop Electronics</h1>
+            <p>Real products with amazing deals - Fast delivery to Sholapur</p>
+        </div>
+    </section>
+
+    <!-- Products with REAL PHOTOS -->
+    <section class="products-section">
+        <h2 class="section-title">Featured Electronics</h2>
+        <div class="products-grid">
+            <!-- MacBook Air M2 -->
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1607171942351-86b7a537c6d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Apple MacBook Air M2" class="product-image">
+                <div class="product-info">
+                    <div class="product-title">Apple MacBook Air M2 13" Laptop (8GB RAM, 256GB SSD)</div>
+                    <div class="product-price">₹89,900</div>
+                    <div class="product-rating">
+                        ★★★★☆ 4.8 (2,456)
+                    </div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+
+            <!-- Apple Watch Series 9 -->
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1682695796496-f2b79dc068a4?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Apple Watch Series 9" class="product-image">
+                <div class="product-info">
+                    <div class="product-title">Apple Watch Series 9 GPS 45mm Aluminium Case</div>
+                    <div class="product-price">₹42,900</div>
+                    <div class="product-rating">
+                        ★★★★★ 4.9 (1,789)
+                    </div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+
+            <!-- Sony WH-1000XM5 -->
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1613427815845-2fff4838a095?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Sony WH-1000XM5" class="product-image">
+                <div class="product-info">
+                    <div class="product-title">Sony WH-1000XM5 Wireless Noise Cancelling Headphones</div>
+                    <div class="product-price">₹24,990</div>
+                    <div class="product-rating">
+                        ★★★★★ 4.9 (5,678)
+                    </div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+
+            <!-- Samsung Galaxy S24 Ultra -->
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1700979802358-54c211f87f8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Samsung Galaxy S24 Ultra" class="product-image">
+                <div class="product-info">
+                    <div class="product-title">Samsung Galaxy S24 Ultra 256GB Titanium Gray</div>
+                    <div class="product-price">₹1,14,999</div>
+                    <div class="product-rating">
+                        ★★★★☆ 4.7 (8,234)
+                    </div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+
+            <!-- iPad Air M2 -->
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1723076323358-9506832354c8?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="iPad Air M2" class="product-image">
+                <div class="product-info">
+                    <div class="product-title">Apple iPad Air 11-inch M2 Wi-Fi 128GB Blue</div>
+                    <div class="product-price">₹59,900</div>
+                    <div class="product-rating">
+                        ★★★★☆ 4.8 (1,234)
+                    </div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+
+            <!-- Canon EOS R6 Mark II -->
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1608661072479-6f631594d0d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Canon EOS R6 Mark II" class="product-image">
+                <div class="product-info">
+                    <div class="product-title">Canon EOS R6 Mark II Mirrorless Camera Body Only</div>
+                    <div class="product-price">₹1,99,995</div>
+                    <div class="product-rating">
+                        ★★★★★ 4.9 (678)
+                    </div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Modal (same) -->
+    <input type="checkbox" id="cart-toggle" style="display:none;">
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-content">
+            <h3>🛒 Your Shopping Cart</h3>
+            <p>Your cart is empty. Add real products above!</p>
+            <label for="cart-toggle" class="add-to-cart">Continue Shopping</label>
+        </div>
+    </div>
+
+    <!-- Footer (same as before) -->
+    <footer>
+        <div class="footer-top">
+            <a href="#" style="color:#fff; font-size:0.875rem; font-weight:500;">↑ Back to top</a>
+        </div>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Get to Know Us</h3>
+                <ul>
+                    <li><a href="#">About Amazon</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Press Releases</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Connect with Us</h3>
+                <ul>
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">Twitter</a></li>
+                    <li><a href="#">Instagram</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Make Money With Us</h3>
+                <ul>
+                    <li><a href="#">Sell on Amazon</a></li>
+                    <li><a href="#">Amazon Associates</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Cart toggle functionality
+        document.getElementById('cart-toggle').addEventListener('change', function() {
+            document.getElementById('cartModal').classList.toggle('active', this.checked);
+        });
+        
+        document.getElementById('cartModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                document.getElementById('cart-toggle').checked = false;
+                this.classList.remove('active');
+            }
+        });
+
+        // Add smooth hover on add to cart buttons
+        document.querySelectorAll('.add-to-cart').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.textContent = 'Added!';
+                setTimeout(() => {
+                    this.textContent = 'Add to Cart';
+                }, 1500);
+            });
+        });
+    </script>
+</body>
+</html>
